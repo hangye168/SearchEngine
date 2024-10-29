@@ -5,6 +5,7 @@ import threading
 import requests
 
 url = "https://huanshu.huan.tv/api/login"
+url1 = "https://huanju.huan.tv/api/login"
 
 headers = {
     'Connection': 'keep-alive',
@@ -21,6 +22,8 @@ def requestApi():
     }
     try:
         data = requests.post(url=url, data=json.dumps(fields), headers=headers, timeout=5)
+        print(data.text)
+        data = requests.post(url=url1, data=json.dumps(fields), headers=headers, timeout=5)
         print(data.text)
     except Exception as e:
         e
