@@ -14,17 +14,19 @@ headers = {
 }
 
 
-def requestApi():
+def requestApi(i):
     fields = {
         'username': str(randomStr(12)),
         'password': str(randomStr(44)),
         'uuid': ''
     }
     try:
-        data = requests.post(url=url, data=json.dumps(fields), headers=headers, timeout=5)
-        print(data.text)
+        data = requests.post(url=url, data=json.dumps(fields), headers=headers, timeout=5)\
+        if i == 888:
+            print(data.text)
         data = requests.post(url=url1, data=json.dumps(fields), headers=headers, timeout=5)
-        print(data.text)
+        if i == 888:
+            print(data.text)
     except Exception as e:
         e
 
@@ -41,7 +43,7 @@ def randomStr(lengthStr):
 def threadSend():
     threads = []
     for t in range(1000):
-        threads.append(threading.Thread(target=requestApi, args=()))
+        threads.append(threading.Thread(target=requestApi, args=(t,)))
     for thr in threads:
         thr.start()
     for thr in threads:
