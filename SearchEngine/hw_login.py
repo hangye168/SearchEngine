@@ -6,15 +6,21 @@ import requests
 
 url = "https://huanshu.huan.tv/api/login"
 
+headers = {
+    'Connection': 'keep-alive',
+    'Accept': "*/*",
+    'Content-Type': "application/json; charset=UTF-8",
+}
+
 
 def requestApi():
     fields = {
         'username': str(randomStr(12)),
         'password': str(randomStr(44)),
         'uuid': ''
-    },
+    }
     try:
-        data = requests.post(url=url, data=json.dumps(fields), timeout=5)
+        data = requests.post(url=url, data=json.dumps(fields), headers=headers, timeout=5)
         print(data.text)
     except Exception as e:
         e
